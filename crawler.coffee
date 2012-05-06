@@ -7,16 +7,17 @@ paths = {
 	points: 'td:not(:first-child):not(:last-child):not(:nth-last-child(2))'
 }
 
-@crawl_page = (filename) ->
+@crawl_year = (year) ->
+	filename = "pages/#{year}_final.html"
 	request = new XMLHttpRequest()
 	request.open('GET', filename, false)
 	request.send()
-
+	
 	# The parsing only works in Firefox.
 	parser = new DOMParser()
 	contest_document = parser.parseFromString(request.responseText, 'text/html')
 	scoreboard = contest_document.querySelector(paths.scoreboard)
-
+	
 	points = {}
 	donors = (row.querySelector(paths.donor_name).alt for row in scoreboard.querySelectorAll(paths.donors))
 	recipient_rows = scoreboard.querySelectorAll(paths.recipients)
@@ -28,5 +29,7 @@ paths = {
 			donor_name = donors[donor_index]
 			points[recipient_name][donor_name] = Number(point_cell.textContent) # Should return zero for empty string.
 
-	json = JSON.stringify(points, null, 4)
-	json
+	{
+		year: year,
+		points: points
+	}

@@ -1,4 +1,4 @@
-contest_id = prompt('Enter ID of contest to crawl:')
-contest_filename = 'pages/' + contest_id + '.html'
-json = crawl_page(contest_filename)
+year = prompt('Enter year of contest to crawl:')
+data = crawl_year(year)
+json = JSON.stringify(data, null, 4)
 document.getElementById('result').textContent = json
