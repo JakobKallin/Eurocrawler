@@ -82,6 +82,7 @@ crawl_language_table = (table, found_languages) ->
 		country = row.querySelector("td:nth-child(#{country_column + 1})").textContent.trim()
 		country = normalized_name(country)
 		language_text = row.querySelector("td:nth-child(#{language_column + 1})").textContent
+		language_text = handle_language_exceptions(language_text)
 		# Remove numbers and everything inside brackets, trim, and split on comma and whitespace.
 		languages = language_text.replace(/\d|\[[^\]]*\]/g, '').trim().split(/,\s*/)
 		found_languages[country] = languages unless found_languages[country]?
@@ -93,3 +94,7 @@ normalized_name = (country) ->
 		when 'Netherlands' then 'The Netherlands'
 		when 'Serbia & Montenegro' then 'Serbia'
 		else country
+
+handle_language_exceptions = (language_text) ->
+	# France 2007
+	language_text.replace(' ("Franglais")', '')
