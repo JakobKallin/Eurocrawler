@@ -17,7 +17,7 @@ point_cell_path = 'td:not(:first-child):not(:last-child):not(:nth-last-child(2))
 	languages = crawl_languages(year)
 	
 	{
-		year: year,
+		year: Number(year),
 		final: final,
 		semi_finals: semi_finals,
 		languages: languages
