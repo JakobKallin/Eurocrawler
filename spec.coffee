@@ -53,6 +53,9 @@ describe 'Crawler', () ->
 	it 'Retrieves languages with country names different from Eurovision.tv', () ->
 		expect(languages['Bosnia & Herzegovina']).toEqual(['English'])
 		expect(languages['F.Y.R. Macedonia']).toEqual(['Macedonian', 'English'])
+	
+	it 'Retrieves languages for all countries', () ->
+		expect(languages[country]).toBeDefined() for country in donors
 
 test_recipient = (actual_points, expected_points) ->
 	test_country actual_points, expected_points, donors

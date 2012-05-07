@@ -89,4 +89,5 @@ normalized_name = (country) ->
 	switch country
 		when 'Bosnia and Herzegovina' then 'Bosnia & Herzegovina'
 		when 'Macedonia' then 'F.Y.R. Macedonia'
+		when 'Netherlands' then 'The Netherlands'
 		else country
