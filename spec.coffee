@@ -1,6 +1,6 @@
 test_year = 2011
 data = crawl_year(test_year)
-points = data.points
+points = data.final.points
 languages = data.languages
 donors = ['Albania', 'Armenia', 'Austria', 'Azerbaijan', 'Belarus', 'Belgium', 'Bosnia & Herzegovina', 'Bulgaria', 'Croatia', 'Cyprus', 'Denmark', 'Estonia', 'F.Y.R. Macedonia', 'Finland', 'France', 'Georgia', 'Germany', 'Greece', 'Hungary', 'Iceland', 'Ireland', 'Israel', 'Italy', 'Latvia', 'Lithuania', 'Malta', 'Moldova', 'Norway', 'Poland', 'Portugal', 'Romania', 'Russia', 'San Marino', 'Serbia', 'Slovakia', 'Slovenia', 'Spain', 'Sweden', 'Switzerland', 'The Netherlands', 'Turkey', 'Ukraine', 'United Kingdom']
 recipients = ['Austria', 'Azerbaijan', 'Bosnia & Herzegovina', 'Denmark', 'Estonia', 'Finland', 'France', 'Georgia', 'Germany', 'Greece', 'Hungary', 'Iceland', 'Ireland', 'Italy', 'Lithuania', 'Moldova', 'Romania', 'Russia', 'Serbia', 'Slovenia', 'Spain', 'Sweden', 'Switzerland', 'Ukraine', 'United Kingdom']
@@ -56,6 +56,9 @@ describe 'Crawler', () ->
 	
 	it 'Retrieves languages for all countries', () ->
 		expect(languages[country]).toBeDefined() for country in donors
+	
+	it 'Retrieves semi-finals', () ->
+		expect(data.semi_finals.length).toEqual(2)
 
 test_recipient = (actual_points, expected_points) ->
 	test_country actual_points, expected_points, donors

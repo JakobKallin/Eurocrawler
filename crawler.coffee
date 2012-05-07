@@ -1,10 +1,35 @@
 point_cell_path = 'td:not(:first-child):not(:last-child):not(:nth-last-child(2))'
 
 @crawl_year = (year) ->
-	filename = "pages/#{year}_final.html"
-	request = new XMLHttpRequest()
-	request.open('GET', filename, false)
-	request.send()
+	final_file = "pages/#{year}_final.html"
+	final = crawl_page(final_file)
+	
+	semi_1_file = "pages/#{year}_semi_1.html"
+	semi_1 = crawl_page(semi_1_file)
+	
+	semi_2_file = "pages/#{year}_semi_2.html"
+	semi_2 = crawl_page(semi_2_file)
+	
+	semi_finals = []
+	semi_finals.push(semi_1) if semi_1?
+	semi_finals.push(semi_2) if semi_2?
+	
+	languages = crawl_languages(year)
+	
+	{
+		year: year,
+		final: final,
+		semi_finals: semi_finals,
+		languages: languages
+	}
+
+crawl_page = (filename) ->
+	try 
+		request = new XMLHttpRequest()
+		request.open('GET', filename, false)
+		request.send()
+	catch error
+		return null
 	
 	# The parsing only works in Firefox.
 	parser = new DOMParser()
@@ -15,12 +40,10 @@ point_cell_path = 'td:not(:first-child):not(:last-child):not(:nth-last-child(2))
 	donors = crawl_donors(scoreboard)
 	points = crawl_points(scoreboard, recipients, donors)
 	
-	languages = crawl_languages(year)
-	
 	{
-		year: year,
-		points: points,
-		languages: languages
+		recipients: recipients,
+		donors: donors,
+		points: points
 	}
 
 crawl_donors = (scoreboard) ->
