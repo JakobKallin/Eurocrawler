@@ -1,11 +1,4 @@
-paths = {
-	scoreboard: '.cb-EventInfo-scoreboard table',
-	donors: 'thead th:not(:first-child):not(:last-child):not(:nth-last-child(2))',
-	donor_name: 'img',
-	recipients: 'tbody tr',
-	recipient_name: 'span.country',
-	points: 'td:not(:first-child):not(:last-child):not(:nth-last-child(2))'
-}
+point_cell_path = 'td:not(:first-child):not(:last-child):not(:nth-last-child(2))'
 
 @crawl_year = (year) ->
 	filename = "pages/#{year}_final.html"
@@ -16,20 +9,41 @@ paths = {
 	# The parsing only works in Firefox.
 	parser = new DOMParser()
 	contest_document = parser.parseFromString(request.responseText, 'text/html')
-	scoreboard = contest_document.querySelector(paths.scoreboard)
+	scoreboard = contest_document.querySelector('.cb-EventInfo-scoreboard table')
 	
-	points = {}
-	donors = (row.querySelector(paths.donor_name).alt for row in scoreboard.querySelectorAll(paths.donors))
-	recipient_rows = scoreboard.querySelectorAll(paths.recipients)
-	for recipient_row in recipient_rows
-		recipient_name = recipient_row.querySelector(paths.recipient_name).textContent
-		points[recipient_name] = {}
-		point_cells = recipient_row.querySelectorAll(paths.points)
-		for point_cell, donor_index in point_cells
-			donor_name = donors[donor_index]
-			points[recipient_name][donor_name] = Number(point_cell.textContent) # Should return zero for empty string.
-
+	recipients = crawl_recipients(scoreboard)
+	donors = crawl_donors(scoreboard)
+	points = crawl_points(scoreboard, recipients, donors)
+	
 	{
 		year: year,
 		points: points
 	}
+
+crawl_donors = (scoreboard) ->
+	path = 'thead th:not(:first-child):not(:last-child):not(:nth-last-child(2)) img'
+	images = scoreboard.querySelectorAll(path)
+	donors = (image.alt for image in images)
+
+crawl_recipients = (scoreboard) ->
+	rows = scoreboard.querySelectorAll('tbody td:first-child span.country')
+	recipients = (row.textContent for row in rows)
+
+crawl_points = (scoreboard, recipients, donors) ->
+	points = {
+		from: {}
+		to: {}
+	}
+	
+	for row, recipient_index in scoreboard.querySelectorAll('tbody tr')
+		recipient = recipients[recipient_index]
+		points.to[recipient] = {}
+		
+		for cell, donor_index in row.querySelectorAll(point_cell_path)
+			donor = donors[donor_index]
+			point = Number(cell.textContent) # Should return zero for empty string.
+			points.to[recipient][donor] = point
+			points.from[donor] = {} if not points.from[donor]?
+			points.from[donor][recipient] = point
+	
+	points
