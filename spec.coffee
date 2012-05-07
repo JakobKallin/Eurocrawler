@@ -1,6 +1,7 @@
 test_year = 2011
 data = crawl_year(test_year)
 points = data.points
+languages = data.languages
 donors = ['Albania', 'Armenia', 'Austria', 'Azerbaijan', 'Belarus', 'Belgium', 'Bosnia & Herzegovina', 'Bulgaria', 'Croatia', 'Cyprus', 'Denmark', 'Estonia', 'F.Y.R. Macedonia', 'Finland', 'France', 'Georgia', 'Germany', 'Greece', 'Hungary', 'Iceland', 'Ireland', 'Israel', 'Italy', 'Latvia', 'Lithuania', 'Malta', 'Moldova', 'Norway', 'Poland', 'Portugal', 'Romania', 'Russia', 'San Marino', 'Serbia', 'Slovakia', 'Slovenia', 'Spain', 'Sweden', 'Switzerland', 'The Netherlands', 'Turkey', 'Ukraine', 'United Kingdom']
 recipients = ['Austria', 'Azerbaijan', 'Bosnia & Herzegovina', 'Denmark', 'Estonia', 'Finland', 'France', 'Georgia', 'Germany', 'Greece', 'Hungary', 'Iceland', 'Ireland', 'Italy', 'Lithuania', 'Moldova', 'Romania', 'Russia', 'Serbia', 'Slovenia', 'Spain', 'Sweden', 'Switzerland', 'Ukraine', 'United Kingdom']
 
@@ -39,6 +40,19 @@ describe 'Crawler', () ->
 		
 	it 'Retrieves column with points to last country', () ->
 		test_donor points.from['Armenia'], {'Sweden': 4, 'Greece': 7, 'Russia': 8, 'France': 5, 'Italy': 6, 'United Kingdom': 2, 'Austria': 3, 'Ukraine': 12, 'Serbia': 1, 'Georgia': 10}
+	
+	it 'Retrieves single language', () ->
+		expect(languages['Poland']).toEqual(['Polish'])
+	
+	it 'Retrieves multiple languages', () ->
+		expect(languages['Norway']).toEqual(['English', 'Swahili'])
+	
+	it 'Retrieves languages with footnotes', () ->
+		expect(languages['Lithuania']).toEqual(['English'])
+	
+	it 'Retrieves languages with country names different from Eurovision.tv', () ->
+		expect(languages['Bosnia & Herzegovina']).toEqual(['English'])
+		expect(languages['F.Y.R. Macedonia']).toEqual(['Macedonian', 'English'])
 
 test_recipient = (actual_points, expected_points) ->
 	test_country actual_points, expected_points, donors
