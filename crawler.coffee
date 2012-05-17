@@ -1,3 +1,56 @@
+country_codes = {
+	'Albania': 'al',
+	'Andorra': 'ad',
+	'Armenia': 'am',
+	'Austria': 'at',
+	'Azerbaijan': 'az',
+	'Belarus': 'by',
+	'Belgium': 'be',
+	'Bosnia and Herzegovina': 'ba',
+	'Bosnia & Herzegovina': 'ba',
+	'Bulgaria': 'bg',
+	'Croatia': 'hr',
+	'Cyprus': 'cy',
+	'Czech Republic': 'cz',
+	'Denmark': 'dk',
+	'Estonia': 'ee',
+	'F.Y.R. Macedonia': 'mk',
+	'Finland': 'fi',
+	'France': 'fr',
+	'Georgia': 'ge',
+	'Germany': 'de',
+	'Greece': 'gr',
+	'Hungary': 'hu',
+	'Iceland': 'is',
+	'Ireland': 'ie',
+	'Israel': 'il',
+	'Italy': 'it',
+	'Latvia': 'lv',
+	'Lithuania': 'lt',
+	'Macedonia': 'mk',
+	'Malta': 'mt',
+	'Moldova': 'md',
+	'Montenegro': 'me',
+	'Netherlands': 'nl',
+	'Norway': 'no',
+	'Poland': 'pl',
+	'Portugal': 'pt',
+	'Romania': 'ro',
+	'Serbia': 'rs',
+	'Serbia & Montenegro': 'rs',
+	'Russia': 'ru',
+	'San Marino': 'sm',
+	'Slovakia': 'sk',
+	'Slovenia': 'si',
+	'Spain': 'es',
+	'Sweden': 'se',
+	'Switzerland': 'ch',
+	'The Netherlands': 'nl',
+	'Turkey': 'tr',
+	'Ukraine': 'ua',
+	'United Kingdom': 'gb'
+}
+
 point_cell_path = 'td:not(:first-child):not(:last-child):not(:nth-last-child(2))'
 
 @crawl_year = (year) ->
@@ -49,11 +102,11 @@ crawl_page = (filename) ->
 crawl_donors = (scoreboard) ->
 	path = 'thead th:not(:first-child):not(:last-child):not(:nth-last-child(2)) img'
 	images = scoreboard.querySelectorAll(path)
-	donors = (normalized_name(image.alt) for image in images)
+	donors = (country_codes[image.alt] for image in images)
 
 crawl_recipients = (scoreboard) ->
 	rows = scoreboard.querySelectorAll('tbody td:first-child span.country')
-	recipients = (normalized_name(row.textContent) for row in rows)
+	recipients = (country_codes[row.textContent] for row in rows)
 
 crawl_points = (scoreboard, recipients, donors) ->
 	points = {
@@ -102,21 +155,13 @@ crawl_language_table = (table, found_languages) ->
 	
 	rows = table.querySelectorAll('tr:not(:first-child)')
 	for row in rows
-		country = row.querySelector("td:nth-child(#{country_column + 1})").textContent.trim()
-		country = normalized_name(country)
+		country_name = row.querySelector("td:nth-child(#{country_column + 1})").textContent.trim()
+		country_code = country_codes[country_name]
 		language_text = row.querySelector("td:nth-child(#{language_column + 1})").textContent
 		language_text = handle_language_exceptions(language_text)
 		# Remove numbers and everything inside brackets, trim, and split on comma and whitespace.
 		languages = language_text.replace(/\d|\[[^\]]*\]/g, '').trim().split(/,\s*/)
-		found_languages[country] = languages unless found_languages[country]?
-
-normalized_name = (country) ->
-	switch country
-		when 'Bosnia and Herzegovina' then 'Bosnia & Herzegovina'
-		when 'Macedonia' then 'F.Y.R. Macedonia'
-		when 'Netherlands' then 'The Netherlands'
-		when 'Serbia & Montenegro' then 'Serbia'
-		else country
+		found_languages[country_code] = languages unless found_languages[country_code]?
 
 handle_language_exceptions = (language_text) ->
 	# France 2007

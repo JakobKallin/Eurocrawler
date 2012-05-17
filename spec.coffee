@@ -2,25 +2,25 @@ test_year = 2011
 data = crawl_year(test_year)
 points = data.final.points
 languages = data.languages
-donors = ['Albania', 'Armenia', 'Austria', 'Azerbaijan', 'Belarus', 'Belgium', 'Bosnia & Herzegovina', 'Bulgaria', 'Croatia', 'Cyprus', 'Denmark', 'Estonia', 'F.Y.R. Macedonia', 'Finland', 'France', 'Georgia', 'Germany', 'Greece', 'Hungary', 'Iceland', 'Ireland', 'Israel', 'Italy', 'Latvia', 'Lithuania', 'Malta', 'Moldova', 'Norway', 'Poland', 'Portugal', 'Romania', 'Russia', 'San Marino', 'Serbia', 'Slovakia', 'Slovenia', 'Spain', 'Sweden', 'Switzerland', 'The Netherlands', 'Turkey', 'Ukraine', 'United Kingdom']
-recipients = ['Austria', 'Azerbaijan', 'Bosnia & Herzegovina', 'Denmark', 'Estonia', 'Finland', 'France', 'Georgia', 'Germany', 'Greece', 'Hungary', 'Iceland', 'Ireland', 'Italy', 'Lithuania', 'Moldova', 'Romania', 'Russia', 'Serbia', 'Slovenia', 'Spain', 'Sweden', 'Switzerland', 'Ukraine', 'United Kingdom']
+donors = ['al', 'am', 'at', 'az', 'by', 'be', 'ba', 'bg', 'hr', 'cy', 'dk', 'ee', 'mk', 'fi', 'fr', 'ge', 'de', 'gr', 'hu', 'is', 'ie', 'il', 'it', 'lv', 'lt', 'mt', 'md', 'no', 'pl', 'pt', 'ro', 'ru', 'sm', 'rs', 'sk', 'si', 'es', 'se', 'ch', 'nl', 'tr', 'ua', 'gb']
+recipients = ['at', 'az', 'ba', 'dk', 'ee', 'fi', 'fr', 'ge', 'de', 'gr', 'hu', 'is', 'ie', 'it', 'lt', 'md', 'ro', 'ru', 'rs', 'si', 'es', 'se', 'ch', 'ua', 'gb']
 
 describe 'Crawler', () ->
 	it 'Retrieves the first row', () ->
-		test_recipient points.to['Finland'], {'Denmark': 5, 'Estonia': 7, 'Germany': 2, 'Iceland': 10, 'Ireland': 3, 'Lithuania': 1, 'Norway': 12, 'Poland': 5, 'Sweden': 7, 'Switzerland': 5}
+		test_recipient points.to['fi'], {'dk': 5, 'ee': 7, 'de': 2, 'is': 10, 'ie': 3, 'lt': 1, 'no': 12, 'pl': 5, 'se': 7, 'ch': 5}
 	
 	it 'Retrieves the last row', () ->
-		test_recipient points.to['Georgia'], {'Armenia': 10, 'Azerbaijan': 10, 'Belarus': 12, 'Bulgaria': 1, 'Estonia': 3, 'Greece': 8, 'Hungary': 5, 'Israel': 2, 'Lithuania': 12, 'Moldova': 7, 'Poland': 7, 'Russia': 6, 'San Marino': 7, 'Turkey': 8, 'Ukraine': 12}
+		test_recipient points.to['ge'], {'am': 10, 'az': 10, 'by': 12, 'bg': 1, 'ee': 3, 'gr': 8, 'hu': 5, 'il': 2, 'lt': 12, 'md': 7, 'pl': 7, 'ru': 6, 'sm': 7, 'tr': 8, 'ua': 12}
 	
 	it 'Retrieves row with points from first country', () ->
-		test_recipient points.to['Spain'], {'Albania': 5, 'Estonia': 4, 'F.Y.R. Macedonia': 4, 'France': 12, 'Portugal': 12, 'Romania': 5, 'Slovakia': 2, 'Slovenia': 2, 'Switzerland': 3, 'United Kingdom': 1}
+		test_recipient points.to['es'], {'al': 5, 'ee': 4, 'mk': 4, 'fr': 12, 'pt': 12, 'ro': 5, 'sk': 2, 'si': 2, 'ch': 3, 'gb': 1}
 		
 	it 'Retrieves row with points from last country', () ->
-		test_recipient points.to['Denmark'], {'Belarus': 1, 'Bulgaria': 7, 'Cyprus': 3, 'Estonia': 10, 'France': 7, 'Germany': 6, 'Iceland': 12, 'Ireland': 12, 'Israel': 10, 'Latvia': 6, 'Malta': 5, 'Norway': 7, 'Poland': 3, 'San Marino': 4, 'Slovakia': 6, 'Slovenia': 8, 'Sweden': 10, 'The Netherlands': 12, 'United Kingdom': 5}
+		test_recipient points.to['dk'], {'by': 1, 'bg': 7, 'cy': 3, 'ee': 10, 'fr': 7, 'de': 6, 'is': 12, 'ie': 12, 'il': 10, 'lv': 6, 'mt': 5, 'no': 7, 'pl': 3, 'sm': 4, 'sk': 6, 'si': 8, 'se': 10, 'nl': 12, 'gb': 5}
 	
 	it 'Computes country sum', () ->
 		sum = 0
-		sum += point for country, point of points.to['Finland']
+		sum += point for country, point of points.to['fi']
 		expect(sum).toEqual(57)
 	
 	it 'Computes total sum', () ->
@@ -30,29 +30,29 @@ describe 'Crawler', () ->
 		expect(sum).toEqual((1+2+3+4+5+6+7+8+10+12) * donors.length)
 	
 	it 'Retrieves the first column', () ->
-		test_donor points.from['Albania'], {'Bosnia & Herzegovina': 7, 'Greece': 10, 'Russia': 4, 'France': 2, 'Italy': 12, 'United Kingdom': 6, 'Azerbaijan': 8, 'Spain': 5, 'Ukraine': 3, 'Serbia': 1}
+		test_donor points.from['al'], {'ba': 7, 'gr': 10, 'ru': 4, 'fr': 2, 'it': 12, 'gb': 6, 'az': 8, 'es': 5, 'ua': 3, 'rs': 1}
 	
 	it 'Retrieves the last column', () ->
-		test_donor points.from['United Kingdom'], {'Denmark': 5, 'Lithuania': 6, 'Ireland': 12, 'Sweden': 3, 'Italy': 7, 'Switzerland': 10, 'Moldova': 8, 'Austria': 2, 'Iceland': 4, 'Spain': 1}
+		test_donor points.from['gb'], {'dk': 5, 'lt': 6, 'ie': 12, 'se': 3, 'it': 7, 'ch': 10, 'md': 8, 'at': 2, 'is': 4, 'es': 1}
 		
 	it 'Retrieves column with points to first country', () ->
-		test_donor points.from['Denmark'], {'Finland': 5, 'Ireland': 12, 'Sweden': 10, 'Estonia': 2, 'United Kingdom': 3, 'Germany': 8, 'Romania': 4, 'Austria': 1, 'Slovenia': 7, 'Iceland': 6}
+		test_donor points.from['dk'], {'fi': 5, 'ie': 12, 'se': 10, 'ee': 2, 'gb': 3, 'de': 8, 'ro': 4, 'at': 1, 'si': 7, 'is': 6}
 		
 	it 'Retrieves column with points to last country', () ->
-		test_donor points.from['Armenia'], {'Sweden': 4, 'Greece': 7, 'Russia': 8, 'France': 5, 'Italy': 6, 'United Kingdom': 2, 'Austria': 3, 'Ukraine': 12, 'Serbia': 1, 'Georgia': 10}
+		test_donor points.from['am'], {'se': 4, 'gr': 7, 'ru': 8, 'fr': 5, 'it': 6, 'gb': 2, 'at': 3, 'ua': 12, 'rs': 1, 'ge': 10}
 	
 	it 'Retrieves single language', () ->
-		expect(languages['Poland']).toEqual(['Polish'])
+		expect(languages['pl']).toEqual(['Polish'])
 	
 	it 'Retrieves multiple languages', () ->
-		expect(languages['Norway']).toEqual(['English', 'Swahili'])
+		expect(languages['no']).toEqual(['English', 'Swahili'])
 	
 	it 'Retrieves languages with footnotes', () ->
-		expect(languages['Lithuania']).toEqual(['English'])
+		expect(languages['lt']).toEqual(['English'])
 	
 	it 'Retrieves languages with country names different from Eurovision.tv', () ->
-		expect(languages['Bosnia & Herzegovina']).toEqual(['English'])
-		expect(languages['F.Y.R. Macedonia']).toEqual(['Macedonian', 'English'])
+		expect(languages['ba']).toEqual(['English'])
+		expect(languages['mk']).toEqual(['Macedonian', 'English'])
 	
 	it 'Retrieves languages for all countries', () ->
 		expect(languages[country]).toBeDefined() for country in donors
