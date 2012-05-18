@@ -19,14 +19,11 @@ describe 'Crawler', () ->
 		test_recipient points.to['dk'], {'by': 1, 'bg': 7, 'cy': 3, 'ee': 10, 'fr': 7, 'de': 6, 'is': 12, 'ie': 12, 'il': 10, 'lv': 6, 'mt': 5, 'no': 7, 'pl': 3, 'sm': 4, 'sk': 6, 'si': 8, 'se': 10, 'nl': 12, 'gb': 5}
 	
 	it 'Computes country sum', () ->
-		sum = 0
-		sum += point for country, point of points.to['fi']
-		expect(sum).toEqual(57)
+		expect(data.final.sum.fi).toEqual(57)
 	
 	it 'Computes total sum', () ->
 		sum = 0
-		for recipient in recipients
-			sum += point for donor, point of points.to[recipient]
+		sum += country_sum for country, country_sum of data.final.sum
 		expect(sum).toEqual((1+2+3+4+5+6+7+8+10+12) * donors.length)
 	
 	it 'Retrieves the first column', () ->
@@ -59,6 +56,35 @@ describe 'Crawler', () ->
 	
 	it 'Retrieves semi-finals', () ->
 		expect(data.semi_finals.length).toEqual(2)
+	
+	it 'Retrieves correct places', () ->
+		expect(data.final.place).toEqual({
+			'az': 1,
+			'it': 2,
+			'se': 3,
+			'ua': 4,
+			'dk': 5,
+			'ba': 6,
+			'gr': 7,
+			'ie': 8,
+			'ge': 9,
+			'de': 10,
+			'gb': 11,
+			'md': 12,
+			'si': 13,
+			'rs': 14,
+			'fr': 15,
+			'ru': 16,
+			'ro': 17,
+			'at': 18,
+			'lt': 19,
+			'is': 20,
+			'fi': 21,
+			'hu': 22,
+			'es': 23,
+			'ee': 24,
+			'ch': 25 
+		})
 
 test_recipient = (actual_points, expected_points) ->
 	test_country actual_points, expected_points, donors

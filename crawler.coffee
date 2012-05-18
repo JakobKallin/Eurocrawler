@@ -92,11 +92,15 @@ crawl_page = (filename) ->
 	recipients = crawl_recipients(scoreboard)
 	donors = crawl_donors(scoreboard)
 	points = crawl_points(scoreboard, recipients, donors)
+	sums = crawl_sums(points, recipients)
+	places = crawl_places(scoreboard, recipients)
 	
 	{
 		recipients: recipients,
 		donors: donors,
-		points: points
+		points: points,
+		sum: sums,
+		place: places
 	}
 
 crawl_donors = (scoreboard) ->
@@ -126,6 +130,25 @@ crawl_points = (scoreboard, recipients, donors) ->
 			points.from[donor][recipient] = point
 	
 	points
+
+crawl_sums = (points, recipients) ->
+	sums = {}
+	for recipient in recipients
+		recipient_sum = 0
+		recipient_sum += point for donor, point of points.to[recipient]
+		sums[recipient] = recipient_sum
+	
+	return sums
+
+crawl_places = (scoreboard, recipients) ->
+	places = {}
+	
+	for row, recipient_index in scoreboard.querySelectorAll('tbody tr')
+		recipient = recipients[recipient_index]
+		place = Number(row.querySelector('td.rank').textContent)
+		places[recipient] = place
+	
+	return places
 
 crawl_languages = (year) ->
 	filename = "pages/#{year}_wiki.html"
