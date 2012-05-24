@@ -70,12 +70,19 @@ point_cell_path = 'td:not(:first-child):not(:last-child):not(:nth-last-child(2))
 	semi_finals.push(semi_2) if semi_2?
 	
 	languages = crawl_languages(year)
+	countries = {}
+	for country_code of languages
+		countries[country_code] = {
+			song: {
+				languages: languages[country_code]
+			}
+		}
 	
 	{
 		year: Number(year),
 		final: final,
 		semi_finals: semi_finals,
-		languages: languages
+		countries: countries
 	}
 
 crawl_page = (filename) ->
@@ -97,22 +104,31 @@ crawl_page = (filename) ->
 	sums = crawl_sums(points, recipients)
 	places = crawl_places(scoreboard, recipients)
 	
+	# Present data in a more object-oriented manner.
+	countries = {}
+	for code in donors
+		countries[code] = {
+			points_to: points.from[code],
+			competes: code in recipients
+		}
+	
+	for code in recipients
+		countries[code].points_from = points.to[code]
+		countries[code].place = places[code]
+		countries[code].sum = sums[code]
+	
 	{
-		recipients: recipients,
-		donors: donors,
-		points: points,
-		sum: sums,
-		place: places
+		countries: countries
 	}
+
+crawl_recipients = (scoreboard) ->
+	rows = scoreboard.querySelectorAll('tbody td:first-child span.country')
+	recipients = (country_codes[row.textContent] for row in rows)
 
 crawl_donors = (scoreboard) ->
 	path = 'thead th:not(:first-child):not(:last-child):not(:nth-last-child(2)) img'
 	images = scoreboard.querySelectorAll(path)
 	donors = (country_codes[image.alt] for image in images)
-
-crawl_recipients = (scoreboard) ->
-	rows = scoreboard.querySelectorAll('tbody td:first-child span.country')
-	recipients = (country_codes[row.textContent] for row in rows)
 
 crawl_points = (scoreboard, recipients, donors) ->
 	points = {
