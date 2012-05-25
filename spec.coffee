@@ -84,12 +84,39 @@ describe 'Crawler', () ->
 		expect(final_countries.ee.place).toEqual(24)
 		expect(final_countries.ch.place).toEqual(25)
 	
-	it 'Retrieves correct competitor status', () ->
+	it 'Retrieves correct competitor statuses', () ->
 		for country in donors
 			if country in recipients
 				expect(final_countries[country].competes).toEqual(true)
 			else
 				expect(final_countries[country].competes).toEqual(false)
+	
+	it 'Retrieves correct running orders', () ->
+		expect(final_countries.fi.running_order).toEqual(1)
+		expect(final_countries.ba.running_order).toEqual(2)
+		expect(final_countries.dk.running_order).toEqual(3)
+		expect(final_countries.lt.running_order).toEqual(4)
+		expect(final_countries.hu.running_order).toEqual(5)
+		expect(final_countries.ie.running_order).toEqual(6)
+		expect(final_countries.se.running_order).toEqual(7)
+		expect(final_countries.ee.running_order).toEqual(8)
+		expect(final_countries.gr.running_order).toEqual(9)
+		expect(final_countries.ru.running_order).toEqual(10)
+		expect(final_countries.fr.running_order).toEqual(11)
+		expect(final_countries.it.running_order).toEqual(12)
+		expect(final_countries.ch.running_order).toEqual(13)
+		expect(final_countries.gb.running_order).toEqual(14)
+		expect(final_countries.md.running_order).toEqual(15)
+		expect(final_countries.de.running_order).toEqual(16)
+		expect(final_countries.ro.running_order).toEqual(17)
+		expect(final_countries.at.running_order).toEqual(18)
+		expect(final_countries.az.running_order).toEqual(19)
+		expect(final_countries.si.running_order).toEqual(20)
+		expect(final_countries.is.running_order).toEqual(21)
+		expect(final_countries.es.running_order).toEqual(22)
+		expect(final_countries.ua.running_order).toEqual(23)
+		expect(final_countries.rs.running_order).toEqual(24)
+		expect(final_countries.ge.running_order).toEqual(25)
 
 test_recipient = (actual_points, expected_points) ->
 	test_country actual_points, expected_points, donors

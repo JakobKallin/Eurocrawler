@@ -112,10 +112,11 @@ crawl_page = (filename) ->
 			competes: code in recipients
 		}
 	
-	for code in recipients
+	for code, index in recipients
 		countries[code].points_from = points.to[code]
 		countries[code].place = places[code]
 		countries[code].sum = sums[code]
+		countries[code].running_order = index + 1
 	
 	{
 		countries: countries
