@@ -107,12 +107,14 @@ crawl_page = (filename) ->
 	countries = {}
 	for code in donors
 		countries[code] = {
-			pointsTo: points.from[code],
+			points: {
+				to: points.from[code]
+			},
 			competes: code in recipients
 		}
 	
 	for code, index in recipients
-		countries[code].pointsFrom = points.to[code]
+		countries[code].points.from = points.to[code]
 		countries[code].place = places[code]
 		countries[code].sum = sums[code]
 		countries[code].runningOrder = index + 1
