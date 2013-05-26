@@ -86,12 +86,11 @@ point_cell_path = 'td:not(:first-child):not(:last-child):not(:nth-last-child(2))
 	}
 
 crawl_page = (filename) ->
-	try 
-		request = new XMLHttpRequest()
-		request.open('GET', filename, false)
-		request.send()
-	catch error
-		return null
+	request = new XMLHttpRequest()
+	request.open('GET', filename, false)
+	request.send()
+	
+	return null if request.status != 200
 	
 	# The parsing only works in Firefox.
 	parser = new DOMParser()
